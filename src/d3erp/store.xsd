@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:element name="store">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ingredients" minOccurs="1" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ingredient" minOccurs="1" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
+										<xs:element name="inventory" minOccurs="1" maxOccurs="1">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="stock" minOccurs="1" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="amount" type="xs:integer" minOccurs="1" maxOccurs="1" />
+																<xs:element name="price" type="xs:double" minOccurs="1" maxOccurs="1" />
+																<xs:element name="usedAmounts" minOccurs="0" maxOccurs="1">
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element name="amount" type="xs:integer" minOccurs="1" maxOccurs="unbounded" />
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="ingredientID" type="xs:integer" use="required" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="items" minOccurs="1" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="item" minOccurs="1" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
+										<xs:element name="blueprint">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="price" type="xs:double" minOccurs="1" maxOccurs="1" />
+													<xs:element name="parts" minOccurs="1" maxOccurs="1">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="part" minOccurs="1" maxOccurs="unbounded">
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element name="ingredientID" type="xs:integer" minOccurs="1" maxOccurs="1" />
+																			<xs:element name="amount" type="xs:integer" minOccurs="1" maxOccurs="1" />
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="itemID" type="xs:integer" use="required" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="positions" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="position" minOccurs="1" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="itemID" type="xs:integer" minOccurs="1" maxOccurs="1" />
+										<xs:element name="amount" type="xs:integer" minOccurs="1" maxOccurs="1" />
+									</xs:sequence>
+									<xs:attribute name="positionID" type="xs:integer" use="required" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+		<xs:unique name="ingredientUnique">
+			<xs:selector xpath="ingredients/ingredient" />
+			<xs:field xpath="@ingredientID" />
+		</xs:unique>
+		<xs:key name="ingredientKey">
+			<xs:selector xpath="ingredients/ingredient" />
+			<xs:field xpath="@ingredientID" />
+		</xs:key>
+		<xs:keyref name="ingredientRef" refer="ingredientKey">
+			<xs:selector xpath="items/item/blueprint/parts/part" />
+			<xs:field xpath="@ingredientID" />
+		</xs:keyref>
+		<xs:unique name="itemUnique">
+			<xs:selector xpath="items/item" />
+			<xs:field xpath="@itemID" />
+		</xs:unique>
+		<xs:key name="itemKey">
+			<xs:selector xpath="items/item" />
+			<xs:field xpath="@itemID" />
+		</xs:key>
+		<xs:keyref name="itemRef" refer="itemKey">
+			<xs:selector xpath="positions/position" />
+			<xs:field xpath="@itemID" />
+		</xs:keyref>
+		<xs:unique name="positionUnique">
+			<xs:selector xpath="positions/position" />
+			<xs:field xpath="@positionID" />
+		</xs:unique>
+		<xs:key name="positionKey">
+			<xs:selector xpath="positions/position" />
+			<xs:field xpath="@positionID" />
+		</xs:key>
+	</xs:element>
+</xs:schema>
