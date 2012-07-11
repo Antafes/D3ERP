@@ -1,5 +1,11 @@
 package d3erp;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import myXML.XMLParser;
 import org.w3c.dom.Document;
@@ -13,15 +19,11 @@ import org.w3c.dom.NodeList;
  */
 public class StoreImporter
 {
-	private boolean debug = true;
 	private XMLParser parser;
 
 	public StoreImporter()
 	{
-		if (this.debug)
-			this.parser = new XMLParser("src/d3erp/store.xsd");
-		else
-			this.parser = new XMLParser("store.xsd");
+		this.parser = new XMLParser(D3erp.class.getResourceAsStream("/d3erp/store.xsd"));
 	}
 
 	/**
@@ -29,11 +31,12 @@ public class StoreImporter
 	 */
 	public void importStore()
 	{
-		String path = D3erp.PATH + "store.xml";
+		String path = Paths.get(D3erp.PATH, "store.xml").toString();
+		File xmlFile = new File(path);
 		Store store = Store.getInstance();
 		Document document;
 
-		if (this.parser.parse(path))
+		if (xmlFile != null && this.parser.parse(xmlFile))
 		{
 			document = this.parser.getDocument();
 			Node storeNode = document.getChildNodes().item(0);
@@ -49,7 +52,10 @@ public class StoreImporter
 			this.getPositions(positions, store);
 		}
 		else
-			System.out.println(this.parser.getValidator().getLastException().getMessage());
+		{
+			this.parser.printExceptions();
+			this.parser.getValidator().printExceptions();
+		}
 	}
 
 	private void getIngredients(NodeList ingredients, Store store)

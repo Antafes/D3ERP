@@ -555,6 +555,9 @@
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="ingredientBuyPanel">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="ingredientBuyPanel.setVisible(false);"/>
+      </AuxValues>
 
       <Layout>
         <DimensionLayout dim="0">

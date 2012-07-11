@@ -353,6 +353,8 @@ public class GUIFrame extends javax.swing.JFrame {
                 .addContainerGap(544, Short.MAX_VALUE))
         );
 
+        ingredientBuyPanel.setVisible(false);
+
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setText("Zutateneinkauf");
 

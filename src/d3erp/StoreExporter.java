@@ -11,15 +11,11 @@ import org.w3c.dom.Element;
  */
 public class StoreExporter
 {
-	private boolean debug = true;
 	private XMLWriter writer;
 
 	public StoreExporter()
 	{
-		if (this.debug)
-			this.writer = new XMLWriter("store");
-		else
-			this.writer = new XMLWriter("store.xsd", "store");
+		this.writer = new XMLWriter(D3erp.class.getResourceAsStream("/d3erp/store.xsd"), "store");
 	}
 
 	/**
